@@ -16,7 +16,10 @@ but anyway, reload button is your friend)
 
 Test it by change about page text
 
-run-dev && figwheel
+./run-dev 
+and in another 
+terminal run 
+./figwheel
 
 ## Development
 
