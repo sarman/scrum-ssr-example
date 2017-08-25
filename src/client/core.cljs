@@ -1,6 +1,6 @@
 (ns client.core
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]
+            [citrus.core :as citrus]
             [goog.dom :as dom]
             [cognitect.transit :as t]
             [ui.core :refer [App]]
@@ -14,12 +14,21 @@
             [client.controllers.ask-posts :as ask-posts]
             [client.controllers.job-posts :as job-posts]
             [client.controllers.user :as user]
-            [client.controllers.post :as post]))
+            [client.controllers.post :as post]
+
+            [alandipert.storage-atom :refer [local-storage]]))
+
+(def state (local-storage (atom {}) :state))
+
+(add-watch state :watch-change
+           (fn [key a old-val new-val]
+             ;;(js/console.log new-val)
+             ))
 
 ;; reconciler
 (def r
-  (scrum/reconciler
-    {:state (atom {})
+  (citrus/reconciler
+    {:state state
      :controllers
      {:router router/control
       :top-posts top-posts/control
@@ -35,7 +44,7 @@
 ;; load controller data on navigation change
 (defn- watch-router! []
   (add-watch
-    (scrum/subscription r [:router])
+    (citrus/subscription r [:router])
     :router
     (fn [_ _ _ {:keys [handler route-params]}]
       (when-let
@@ -49,17 +58,28 @@
            :user :user
            :post :post
            nil)]
-        (scrum/dispatch! r ctrl :load route-params)))))
+        (citrus/dispatch! r ctrl :load route-params)))))
 
 (defn render []
   (rum/mount (App r)
              (dom/getElement "app")))
 
-(defn ^:export init-app [state]
-  (let [state (t/read (t/reader :json) state)] ;; read server state
-    (scrum/broadcast-sync! r :init) ;; init all controllers
-    (doseq [[ctrl init-state] state]
-      (scrum/dispatch-sync! r ctrl :init init-state)) ;; init controllers with server state
-    (r/start! #(scrum/dispatch! r :router :push %) routes) ;; start router
+(defn ^:export init-app [server-state]
+  (let [server-state (t/read (t/reader :json) server-state)] ;; read server state
+    (js/console.log server-state)
+    (swap! state assoc :server-state server-state)
+    (citrus/broadcast-sync! r :init) ;; init all controllers
+    (doseq [[ctrl init-state] server-state]
+      (citrus/dispatch-sync! r ctrl :init init-state)) ;; init controllers with server state
+    (r/start! #(citrus/dispatch! r :router :push %) routes) ;; start router
     (render) ;; render the app
     (watch-router!))) ;; watch route changes to load data on change
+
+(defn restore-local-state []
+  "For figwheel"
+  (js/console.log state)
+  (citrus/broadcast-sync! r :init)                          ;; init all controllers
+  ;;(citrus/dispatch-sync! r ctrl :init state)                ;; reinit controllers with local state
+  (r/start! #(citrus/dispatch! r :router :push %) routes)   ;; start router
+  (render)                                                  ;; render the app
+  (watch-router!))

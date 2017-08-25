@@ -1,6 +1,6 @@
 (ns ui.pages.user
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]))
+            [citrus.core :as citrus]))
 
 (defn- format-date [ts]
   (let [date #?(:clj (java.util.Date. (* ts 1000))
@@ -25,7 +25,7 @@
       value)]])
 
 (rum/defc Layout < rum/reactive [r]
-  (let [user (rum/react (scrum/subscription r [:user]))]
+  (let [user (rum/react (citrus/subscription r [:user]))]
     [:main.layout
      [:div.page-content
       [:ul.about-list

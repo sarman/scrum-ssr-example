@@ -1,6 +1,6 @@
 (ns ui.base
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]))
+            [citrus.core :as citrus]))
 
 (defn- get-date []
   #?(:clj (java.util.Date.)

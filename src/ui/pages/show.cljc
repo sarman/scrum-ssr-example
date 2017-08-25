@@ -1,11 +1,11 @@
 (ns ui.pages.show
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]
+            [citrus.core :as citrus]
             [ui.base :as base]))
 
 (rum/defc Layout < rum/reactive [r]
   (let [{:keys [from to total items]}
-        (rum/react (scrum/subscription r [:show-posts]))
+        (rum/react (citrus/subscription r [:show-posts]))
         current (when (pos? total) (/ to (- to from)))
         total (when (pos? total) (->> (- to from) (/ total) Math/ceil int))]
     [:main.layout

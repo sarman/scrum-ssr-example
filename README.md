@@ -1,5 +1,23 @@
 # Hacker News Clone
 
+
+## Fork info
+
+this is a fork of ssr example 
+https://github.com/roman01la/scrum-ssr-example
+
+roman01la was rename a project, to citrus,
+so i do it too.
+
+Just add figwheel, hot client code reload.
+
+Not sure about "reloaded" workflow now,
+but anyway, reload button is your friend)
+
+Test it by change about page text
+
+run-dev && figwheel
+
 ## Development
 
 *start web app build*

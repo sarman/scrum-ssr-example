@@ -1,6 +1,6 @@
 (ns ui.core
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]
+            [citrus.core :as citrus]
             [ui.header :refer [Header]]
             [ui.pages.about :as about-page]
             [ui.pages.top :as top-page]
@@ -20,7 +20,7 @@
 
 (rum/defc App < rum/reactive [r]
   (let [{route :handler}
-        (rum/react (scrum/subscription r [:router]))]
+        (rum/react (citrus/subscription r [:router]))]
     [:div
      (Header links route)
      (case route

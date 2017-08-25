@@ -1,0 +1,2 @@
+#!/bin/sh
+(echo "(go)"; cat <&0) | rlwrap lein repl

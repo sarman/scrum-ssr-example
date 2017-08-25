@@ -1,6 +1,6 @@
 (ns ui.pages.post
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]
+            [citrus.core :as citrus]
             [ui.base :as base]))
 
 (rum/defc PostItem
@@ -43,7 +43,7 @@
 
 (rum/defc Layout < rum/reactive [r]
   (let [{:keys [descendants loading? kids] :as post}
-        (rum/react (scrum/subscription r [:post]))]
+        (rum/react (citrus/subscription r [:post]))]
     [:main.layout.post
      (when-not loading?
        [:div.page-content

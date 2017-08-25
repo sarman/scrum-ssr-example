@@ -1,5 +1,5 @@
 (ns client.effects
-  (:require [scrum.core :as scrum]
+  (:require [citrus.core :as citrus]
             [cognitect.transit :as t]))
 
 (defn- ->rpc [method params]
@@ -24,5 +24,5 @@
       (.then #(.text %))
       (.then ->edn)
       (.then #(:result %))
-      (.then #(scrum/dispatch! r c on-success %))
-      (.catch #(scrum/dispatch! r c on-error %))))
+      (.then #(citrus/dispatch! r c on-success %))
+      (.catch #(citrus/dispatch! r c on-error %))))

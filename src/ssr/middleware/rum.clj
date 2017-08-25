@@ -1,6 +1,6 @@
 (ns ssr.middleware.rum
   (:require [rum.core :as rum]
-            [scrum.core :as scrum]))
+            [citrus.core :as citrus]))
 
 ;; render web app
 (defn wrap-rum [handler ui-root resolver render-page]
@@ -12,7 +12,7 @@
           :body
           (let [state (atom {})
                 reconciler
-                (scrum/reconciler
+                (citrus/reconciler
                   {:state state
                    :resolvers (resolver req)})]
             (-> reconciler
